@@ -14,18 +14,23 @@ def apt_install_package(list_package):
     local('sudo apt install -qqy {}'.format(' '.join(list_package)))
 
 @task
+def install_pycharm():
+    local('sudo snap install pycharm-community --classic')
+
+@task
 def install_zsh():
     apt_install_package(['zsh','wget'])
     local('wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh')
     sudo('chsh -s `which zsh`')
-    
+
+
+
 @task
 def install_new():
     # local('sudo apt install -qqy meld nerd-fonts-complete monaco gitkraken')
     # local('sudo apt install -qqy gedit-code-assistance editorconfig-gedit')
     # local('sudo apt install -qqy linux linux-headers')
     # vdfuse
-    # local('sudo apt install -qqy google-cloud-sdk google-chrome')
     # local('sudo apt install -qqy android-studio genymotion scrcpy')
     # local('sudo apt install -qqy intellij-idea-ce  pycharm-community')
     # local('sudo apt install -qqy spotify discord signal')
