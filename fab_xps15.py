@@ -3,52 +3,84 @@
 
 from fabric.api import *
 
+#   git config --global user.email "logickee@gmail.com"
+#   git config --global user.name "logickee"
 
+
+def apt_install_package(list_package):
+    local('sudo apt install -qqy {}'.format(' '.join(list_package)))
 
 @task
+def install_zsh():
+    apt_install_package(['zsh','wget'])
+    local('wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh')
+    sudo('chsh -s `which zsh`')
+    
+@task
 def install_new():
-    # oh-my-zsh sshrc
-    local('sudo apt install -qqy zsh tmux  net-tools ')    
-    local('sudo apt install -qqy zsh tmux  imwheel htop nmap httpie ')
     # local('sudo apt install -qqy meld nerd-fonts-complete monaco gitkraken')
     # local('sudo apt install -qqy gedit-code-assistance editorconfig-gedit')
     # local('sudo apt install -qqy linux linux-headers')
     # vdfuse
-    local('sudo apt install -qqy virtualbox virtualbox-dkms virtualbox-ext-pack ')
-    local('sudo apt install -qqy rclone filezilla')
-    local('sudo apt install -qqy rhythmbox remmina')    
-    # local('sudo apt install -qqy networkmanager-openconnect networkmanager-openvpn networkmanager-pptp')
     # local('sudo apt install -qqy google-cloud-sdk google-chrome')
     # local('sudo apt install -qqy android-studio genymotion scrcpy')
     # local('sudo apt install -qqy intellij-idea-ce  pycharm-community')
     # local('sudo apt install -qqy spotify discord signal')
     # local('sudo apt install -qqy ibus-cangjie')
-    local('sudo apt install -qqy guake')
     # local('sudo apt install -qqy ttf-emojione-color ttf-twemoji-color')
     # local('sudo apt install -qqy peek')
     # local('sudo apt install -qqy bitwarden')
-    local('sudo apt install -qqy vlc')
-    local('sudo apt install -qqy p7zip unrar tar rsync')
+
+    packages_list=[
+        'gnome-shell-extension-tilix-dropdown', 'tilix',
+        'vlc',
+        'p7zip unrar tar rsync',
+        'network-manager-openconnect network-manager-openvpn network-manager-pptp',
+        'rhythmbox remmina',
+        'rclone filezilla',
+        'virtualbox virtualbox-dkms virtualbox-ext-pack',
+        'tmux  imwheel htop nmap httpie vim',
+        'net-tools'
+    ]
+
+    for package in packages_list:
+        apt_install_package(package)
+
+
+@task
+def install_google_cloud_sdk():
+    ubuntu_code_version=local('lsb_release -c -s',capture=True)
+    CLOUD_SDK_REPO_ENV_VAR = 'cloud-sdk-{}'.format(ubuntu_code_version)
+    
+    # Add the Cloud SDK distribution URI as a package source
+    local('echo "deb http://packages.cloud.google.com/apt {} main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list'.format(CLOUD_SDK_REPO_ENV_VAR))
+
+    # Import the Google Cloud Platform public key
+    local('curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -')
+
+    # Update the package list and install the Cloud SDK
+    local('sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk')
 
 @task
 def install_gnome_ext():
     list_ext=[
-        'plank',
-        # 'gnome-shell-extension-no-topleft-hot-corner',
-        # 'gnome-shell-extension-gsconnect',
+        'gnome-shell-extensions',
+        'gnome-shell-extension-dashtodock',
         'gnome-shell-pomodoro',
         'gnome-shell-extension-mediaplayer',
+        'gnome-shell-extension-caffeine',
+        'arc-theme'
+        # 'gnome-shell-extension-no-topleft-hot-corner',
+        # 'gnome-shell-extension-gsconnect',
         # 'gnome-shell-extension-topicons-plus',
         # 'gnome-shell-extension-no-title-bar',
-        'gnome-shell-extension-caffeine',
         # 'gnome-shell-extension-extended-gestures'
     ]
     for ext in list_ext:
-        local('sudo apt install -qqy  {}'.format(ext))
+        apt_install_package(ext)
 
     local('sudo apt-get remove gnome-shell-extension-ubuntu-dock')
-    local('gsettings set org.gnome.shell enable-hot-corners true')
-    local('sudo apt install -qqy arc-theme')
+    local('gsettings set org.gnome.shell enable-hot-corners false')
 
 @task
 def install_vscode():
@@ -57,7 +89,7 @@ def install_vscode():
     local('sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg')
     local('''sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' ''')
     local('sudo apt update')
-    local('sudo apt install code')
+    local('sudo apt install -qqy code')
 
 
 @task
