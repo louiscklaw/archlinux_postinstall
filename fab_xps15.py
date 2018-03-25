@@ -6,7 +6,7 @@ from fabric.api import *
 #   git config --global user.email "logickee@gmail.com"
 #   git config --global user.name "logickee"
 
-# sudo apt install git python3-pip 
+# sudo apt install -qqy  git python3-pip 
 
 
 
