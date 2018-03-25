@@ -6,6 +6,9 @@ from fabric.api import *
 #   git config --global user.email "logickee@gmail.com"
 #   git config --global user.name "logickee"
 
+# sudo apt install git python3-pip 
+
+
 
 def apt_install_package(list_package):
     local('sudo apt install -qqy {}'.format(' '.join(list_package)))
