@@ -4,13 +4,19 @@
 from fabric.api import *
 
 
+from fab_gnome import *
+
 @task
 def install_pacaur():
     local('curl https://gist.githubusercontent.com/tadly/0e65d30f279a34c33e9b/raw/dc2f868d161cf420725d75e0fc0f284e3e0b9f09/pacaur_install.sh | sh -')
     local('pacaur -Sy --needed --noconfirm --noedit patch')
 
 @task
-def install_new():
+def disable_error_report():
+    local('sudo systemctl disable apport.service')
+
+@task
+def install_new1():
 
     local('pacaur -Sy --needed --noconfirm --noedit zsh tmux oh-my-zsh-git imwheel htop nmap httpie sshrc')
     local('pacaur -Sy --needed --noconfirm --noedit visual-studio-code-bin meld nerd-fonts-complete monaco gitkraken')
@@ -18,7 +24,7 @@ def install_new():
     local('pacaur -Sy --needed --noconfirm --noedit linux linux-headers')
     local('pacaur -Sy --needed --noconfirm --noedit virtualbox virtualbox-host-dkms virtualbox-ext-oracle vdfuse')
     local('pacaur -Sy --needed --noconfirm --noedit rclone filezilla')
-    local('pacaur -Sy --needed --noconfirm --noedit rhythmbox remmina')    
+    local('pacaur -Sy --needed --noconfirm --noedit rhythmbox remmina')
     local('pacaur -Sy --needed --noconfirm --noedit networkmanager-openconnect networkmanager-openvpn networkmanager-pptp')
     local('pacaur -Sy --needed --noconfirm --noedit google-cloud-sdk google-chrome')
     local('pacaur -Sy --needed --noconfirm --noedit android-studio genymotion scrcpy')
