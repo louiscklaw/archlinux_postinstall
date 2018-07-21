@@ -27,13 +27,6 @@ PROJ_HOME = [
     '/home/logic/_tmp'
 ]
 
-env.hosts = ['logic@192.168.88.227']
-# env.hosts = ['logic@localhost']
-
-
-env.password = 'gjk98lo21'
-
-
 @task
 def download_fonts():
     local('wget https://raw.githubusercontent.com/todylu/monaco.ttf/master/monaco.ttf')
@@ -320,3 +313,9 @@ def fallback_origional_gnome():
 
     # sudo('update-alternatives --config gdm3.css')
     # sudo('apt install -qqy gnome-maps gnome-weather polari gnome-documents gnome-photos gnome-music')
+
+@task
+def install_cura():
+    sudo('add-apt-repository -u -y ppa:thopiekar/cura')
+    sudo('apt-get update ')
+    sudo('apt-get install -qqy cura')
