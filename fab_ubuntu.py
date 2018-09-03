@@ -153,7 +153,9 @@ def install_utilities():
         'gnome-tweaks',
         'glances',
         'flameshot',
-        'gdebi'
+        'gdebi','dconf-editor',
+        'baobab','bleachbit','gigolo'
+
     ]
     for package in packages_list:
         apt_install_package([package])
@@ -163,6 +165,17 @@ def gdebi_from_url(url):
     sudo('wget -O /tmp/temp.deb {}'.format(url))
     sudo('gdebi -q -n /tmp/temp.deb')
 
+
+@task
+def install_cronopete():
+    CRONOPETE_DEB = '/tmp/cronpoete.deb'
+    DEB_DOWNLOAD_URL = 'http://www.rastersoft.com/descargas/cronopete/cronopete-bionic_4.5.1-ubuntu1_amd64.deb'
+
+    apt_install_package(['gigolo'])
+
+    wget_command = 'wget -O {} {}'.format(CRONOPETE_DEB, DEB_DOWNLOAD_URL)
+    sudo(wget_command)
+    sudo('gdebi -n -q  {}'.format(CRONOPETE_DEB))
 
 
 @task
@@ -179,9 +192,8 @@ def install_vim():
 @task
 def install_cursor():
     sudo('rm -rf capitaine-cursors')
-    run('git clone https://github.com/keeferrourke/capitaine-cursors.git')
-    run('mkdir -p ~/.icons/capitaine-cursors')
-    run('cp -pr capitaine-cursors/dist/ ~/.icons/capitaine-cursors')
+    sudo('add-apt-repository -y -u ppa:dyatlov-igor/la-capitaine')
+    sudo('apt install -y la-capitaine-cursor-theme')
 
 
 @task
@@ -213,7 +225,12 @@ def install_php():
 
 @task
 def install_vagrant():
-    sudo('sudo apt-get install -qqy vagrant')
+    sudo('apt-get install -qqy vagrant')
+
+@task
+def install_git():
+    apt_install_package(['git'])
+    local('git config --global core.editor "vim"')
 
 
 @task
@@ -276,10 +293,10 @@ def install_spotify():
     # 2. Add the Spotify repository
     # 3. Update list of available packages
     # 4. Install Spotify
-    local('sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410')
     local('echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list')
-    local('sudo apt-get update')
-    local('sudo apt-get install -qqy spotify-client')
+    sudo('apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A87FF9DF48BF1C90')
+    sudo('apt-get update')
+    sudo('apt-get install -qqy spotify-client')
 
 
 @task
