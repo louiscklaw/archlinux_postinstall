@@ -1,0 +1,1 @@
+fab -H localhost      install_utilities install_vagrant install_vim  install_xnview install_zsh install_zsh_theme spin_go_env spin_mongod
