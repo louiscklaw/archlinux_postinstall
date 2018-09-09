@@ -386,6 +386,8 @@ def install_google_cloud_sdk():
 @task
 def install_zsh():
     apt_install_package(['git', 'zsh', 'wget', 'zsh-syntax-highlighting'])
+    with settings(warn_only=True):
+        sudo('rm -rf /home/logic/.oh-my-zsh')
     run('wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh')
     sudo('chsh -s `which zsh` logic')
 
@@ -417,6 +419,7 @@ def install_keybase():
 def install_freecad():
     apt_add_repository('ppa:freecad-maintainers/freecad-stable')
     apt_install_package(['freecad'])
+    local()
 
 @task
 def install_kicad():
