@@ -354,6 +354,11 @@ def install_gnome_ext():
 
 
 @task
+def install_synergy():
+    apt_install_package(['synergy','sni-qt'])
+
+
+@task
 def install_google_cloud_sdk():
     ubuntu_code_version = local('lsb_release -c -s', capture=True)
     CLOUD_SDK_REPO_ENV_VAR = 'cloud-sdk-{}'.format(ubuntu_code_version)
