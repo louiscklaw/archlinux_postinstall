@@ -154,7 +154,8 @@ def install_utilities():
         'glances',
         'flameshot',
         'gdebi','dconf-editor',
-        'baobab','bleachbit','gigolo'
+        'baobab','bleachbit','gigolo',
+        'gnome-maps'
 
     ]
     for package in packages_list:
@@ -391,6 +392,11 @@ def install_zsh():
     run('wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh')
     sudo('chsh -s `which zsh` logic')
 
+
+@task
+def install_keepass2():
+    apt_add_repository('ppa:jtaylor/keepass')
+    apt_install_package(['keepass2'])
 
 @task
 def install_zsh_theme():
