@@ -85,16 +85,6 @@ def install_pycharm():
 
 
 @task
-def install_zsh():
-    #
-    apt_install_package('zsh wget git tig git-flow fonts-powerline')
-    run('wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh')
-    sudo('chsh -s /usr/bin/zsh')
-
-    put('/home/logic/.zshrc', '/home/logic')
-
-
-@task
 def sync_gnome_extensions():
     rsync_project(
         local_dir='/home/logic/.local/share/gnome-shell/extensions/',
@@ -137,7 +127,10 @@ def install_sshrc():
     run('wget --no-check-certificate https://raw.githubusercontent.com/Russell91/sshrc/master/sshrc')
     run('chmod +x sshrc')
     sudo('mv sshrc /usr/local/bin')
-
+    origional_ssh_path = sudo('echo `which ssh`')
+    ssh_path_backup = origional_ssh_path+'.bak'
+    sudo('mv {} {}'.format(origional_ssh_path, ssh_path_backup) )
+    sudo('ln -s /usr/local/bin/sshrc {}'.format(origional_ssh_path))
 
 @task
 def install_spotify():
