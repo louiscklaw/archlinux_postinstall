@@ -438,6 +438,11 @@ def install_flatremix():
     apt_install_package('flat-remix flat-remix-gtk flat-remix-gnome'.split(' '))
 
 @task
+def install_oracle_java():
+    apt_add_repository('ppa:webupd8team/java')
+    apt_install_package(['oracle-java8-installer','oracle-java8-set-default'])
+
+@task
 def install_all():
     # install_docker()
     sudo('apt clean')
